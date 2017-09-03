@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="/bookstore/styles/main.css" type="text/css" rel="stylesheet" />
+<title>图书管理</title>
+</head>
+<body>
+    <div class="main">
+        <h2 class="title"><span>图书管理</span></h2> 
+        <form action="/bookstore/delete" method="post">
+        <p>
+            <a href="/bookstore/addUI" class="abtn">添加</a>
+            <input type="submit"  value="删除选择项" class="btn"/>&nbsp; &nbsp;
+            <input type="text" id="title" value="#(title)"/>
+            <a href="javascript:void(0)" onclick="seach()" class="abtn">搜索</a>
+        </p>
+        <p></p>
+<!--         <form action="/bookstore/delete" method="post">  -->
+        <table border="1" width="100%" class="tab">
+            <tr>
+                <th><input type="checkbox" id="chbAll"></th>
+                <th>编号</th>
+                <th>书名</th>
+                <th>价格</th>
+                <th>出版日期</th>
+                <th>操作</th>
+            </tr>
+			#for(book : pageBean.list)
+                <tr>
+                    <th><input type="checkbox" name="id" value="#(book.id)"></th>
+                    <td>#(book.id)</td>
+                    <td>#(book.title)</td>
+                    <td>#(book.price)</td>
+                    <td>#date(book.publishDate, "yyyy年MM月dd日")</td>
+                    <td>
+                    <a href="/bookstore/delete?id=#(book.id)" class="abtn">删除</a>
+                    <a href="/bookstore/editUI?id=#(book.id)" class="abtn">编辑</a>
+                    </td>
+                </tr>
+            #end
+        </table>
+        <!-- <p style="color: red">${message}</p> -->
+        <p style="color: red"><!-- 删除成功 ! --></p>
+        <!-- <p>
+            <a href="/bookstore/addUI" class="abtn">添加</a>
+            <input type="submit"  value="删除选择项" class="btn"/>
+        </p> -->
+        <div class="paging"></div>
+    </form>
+    </div>
+</body>
+<script type="text/javascript" src="/js/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="/js/pageUtil.js"></script>
+<script type="text/javascript">
+	function seach(){
+		var title = document.getElementById('title').value;
+		var url = "/bookstore/list?title="+title+"&pageNum="
+		window.location.href = url;
+	}
+</script>
+<script>
+$(function() { 
+	var title = document.getElementById('title').value;
+	page.showPage(#(pageBean.pageNumber),#(pageBean.totalPage),"/bookstore/list?title="+title+"&pageNum=");
+});
+/* $(function(){
+	page.showPage(${pageBean.currentPage},${pageBean.totalPages},"changePage");
+}); */
+
+/* function changePage(nextPage){
+	window.location.href="/bookstore/list?pageNum="+nextPage;
+} */
+</script>
+</html>
