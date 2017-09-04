@@ -21,7 +21,10 @@ import com.jfinal.plugin.activerecord.SqlPara;
 import com.jfinal.plugin.activerecord.TableMapping;
 import java.util.Map.Entry;
 
-
+/**
+ * @author zxl,
+ * 通用的数据库操作
+ */
 @SuppressWarnings({"rawtypes", "unchecked","unused"})
 public class commonService<M extends Model>{
 	
@@ -38,16 +41,9 @@ public class commonService<M extends Model>{
 		}
 	}
 	
-	public Page<M> paginate(int pageNumber, int pageSize) {
-		return dao.paginate(pageNumber, pageSize, "select *", "from "+table+" order by id asc");
-	}
-	
-	public Page<M> paginate(int pageNumber, int pageSize, String title) {
-		return dao.paginate(pageNumber, pageSize, "select *", "from "+table+" where title like ? order by id asc", title+"%");
-	}
-	
-	public M findById(int id) {
-		return (M) dao.findById(id);
+	public M save(M model) {
+		model.save();
+		return model;
 	}
 	
 	public void deleteById(int id) {
@@ -67,7 +63,16 @@ public class commonService<M extends Model>{
 			Db.update("delete from "+table+" where id in ("+sb+")", ids);
 		}
 	}
-
+	
+	public M update(M model) {
+		model.update();
+		return model;
+	}
+	
+	public M findById(int id) {
+		return (M) dao.findById(id);
+	}
+	
 	public List<M> findAll() {
 		return dao.find("select * from "+table);
 	}
@@ -75,44 +80,109 @@ public class commonService<M extends Model>{
 	public List<M> findByTitle(String title) {
 		return dao.find("select * from "+table+" where title like ?", title+"%");
 	}
-
-	public M update(M model) {
-		model.update();
-		return model;
-	}
-
-	public M save(M model) {
-		model.save();
-		return model;
+	
+	public Page<M> paginate(int pageNumber, int pageSize) {
+		return dao.paginate(pageNumber, pageSize, "select *", "from "+table);
 	}
 	
-	public List<M> search(M entity, String orderField) {
+	public Page<M> paginate(int pageNumber, int pageSize, String title) {
+		return dao.paginate(pageNumber, pageSize, "select *", "from "+table+" where title like ? ", title+"%");
+	}
+	
+	public M findByObject(M entity){
+		List<M> result = search(entity, null, null);
+		return ((result.size() > 0) ? (M) result.get(0) : null);
+	}
+
+	public List<M> queryObjectForList(){
+		return search(null, null, null);
+	}
+
+	public List<M> queryObjectForList(String orderField){
+		return search(null, orderField, null);
+	}
+
+	public List<M> queryObjectForList(M entity){
+		return search(entity, null, null);
+	}
+
+	public PageBean<M> queryPageForList(){
+		return seachPage(null, null);
+	}
+
+	public PageBean<M> queryPageForList(String orderField){
+		return seachPage(null, orderField);
+	}
+	
+	public PageBean<M> queryPageForList(M entity){
+		return seachPage(entity, null);
+	}
+	
+	/**
+	 * 核心方法,私有化,只供本类调用
+	 */
+	private List<M> search(M entity, String sort, String order) {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		sb.append("select * from ").append(table).append(" where 1=1 ");
 		if(entity!=null){
 			Model maps2 = ((Model)entity);
 			Set<Entry<String, Object>> set= maps2._getAttrsEntrySet();
-			for(Entry<String, Object> entry:set){
+			for(Entry<String, Object> entry : set){
 				if(entry.getValue() != null){
 					sb.append(" and ").append(entry.getKey()).append("=?");
 					values.add(entry.getValue());
 				}
 			}
 		}
-		if(StrKit.notBlank(orderField)){
-			sb.append(" order by ").append(orderField);
+		if(StrKit.notBlank(sort)){
+			sb.append(" order by ").append(sort);
+			if (StrKit.notBlank(order)){
+				sb.append(" "+order);
+			}
 		}
 		return dao.find(sb.toString(), values.toArray());  //values为空也不要紧
 	}
 	
+	private PageBean<M> seachPage(M entity, int pageNum, int pageSize, String sort, String order){
+		//order不指定时数据库默认asc
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
+		sb.append("select * from ").append(table).append(" where 1=1 ");
+		sb2.append("select count(*) from ").append(table).append(" where 1=1 ");
+		List<Object> values = new ArrayList<Object>();
+		if(entity!=null){
+			Model maps2 = ((Model)entity);
+			Set<Entry<String, Object>> set= maps2._getAttrsEntrySet();
+			for(Entry<String, Object> entry:set){
+				if(entry.getValue() != null){
+					sb.append(" and ").append(entry.getKey()).append("=?");
+					sb2.append(" and ").append(entry.getKey()).append("=?");
+					values.add(entry.getValue());
+				}
+			}
+		}
+		if (StrKit.notBlank(sort)){
+			sb.append(" order by "+sort);
+			if (StrKit.notBlank(order)){
+				sb.append(" "+order);
+			}
+		}
+		int start = (pageNum-1) * pageSize;
+		sb.append(" limit "+start+","+pageSize);
+		List<M> list = dao.find(sb.toString(), values.toArray());
+		long total = Db.queryLong(sb2.toString(), values.toArray());
+		PageBean pageBean = new PageBean<M>(pageNum+1, pageSize, (int)total,  list);
+		return pageBean;
+	}
+	
 	//抽离的通用方法
-	public PageBean<M> seachPage(M entity, String orderField){
+	private PageBean<M> seachPage(M entity, String orderBy){
 		HttpServletRequest request = CommonUtil.getHttpRequest();
 		Integer pageNum = CommonUtil.valueOf(request.getParameter("pageNum"), 1);
 		Integer pageSize = CommonUtil.valueOf(request.getParameter("pageSize"), 10);
-		if(StrKit.isBlank(orderField)){
-			orderField = request.getParameter("sort");
+		if(StrKit.isBlank(orderBy)){
+			orderBy = request.getParameter("sort");
 		}
 		String orderDirection = request.getParameter("order");
 		Integer start = null;
@@ -136,20 +206,16 @@ public class commonService<M extends Model>{
 				}
 			}
 		}
-	//	Integer start = pageNum * pageSize;
-		if (StrKit.notBlank(orderField))
-		{
-			sb.append(" order by "+orderField);
-			if (StrKit.notBlank(orderDirection))
-			{
+		if (StrKit.notBlank(orderBy)){
+			sb.append(" order by "+orderBy);
+			if (StrKit.notBlank(orderDirection)){
 				sb.append(" "+orderDirection);
 			}
 		}
 		if(start != null){
 			sb.append(" limit "+start+","+pageSize);
 		}
-		List<M> list = new ArrayList<M>();
-		list = dao.find(sb.toString(), values.toArray());
+		List<M> list = dao.find(sb.toString(), values.toArray());
 		long total = Db.queryLong(sb2.toString(), values.toArray());
 		PageBean pageBean = new PageBean<M>(pageNum+1, pageSize, (int)total,  list);
 		return pageBean;

@@ -2,6 +2,9 @@ package com.demo.springplugin;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.IPlugin;
 
@@ -35,6 +38,12 @@ public class SpringPlugin implements IPlugin {
 		else
 			IocInterceptor.ctx = new FileSystemXmlApplicationContext(PathKit.getWebRootPath() + "/WEB-INF/applicationContext.xml");
 		return true;
+		
+		/*if (ctx != null)
+			IocInterceptor.ctx = ctx;
+		else
+			IocInterceptor.ctx = WebApplicationContextUtils.getWebApplicationContext(JFinal.me().getServletContext());
+		return true;*/
 	}
 	
 	public boolean stop() {

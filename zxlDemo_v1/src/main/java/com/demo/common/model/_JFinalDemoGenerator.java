@@ -1,7 +1,8 @@
 package com.demo.common.model;
 
 import javax.sql.DataSource;
-import com.demo.common.DemoConfig;
+
+import com.demo.config.MyAppConfig;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.generator.Generator;
@@ -17,7 +18,7 @@ public class _JFinalDemoGenerator {
 	
 	public static DataSource getDataSource() {
 		PropKit.use("a_little_config.txt");
-		DruidPlugin druidPlugin = DemoConfig.createDruidPlugin();
+		DruidPlugin druidPlugin = MyAppConfig.createDruidPlugin();
 		druidPlugin.start();
 		return druidPlugin.getDataSource();
 	}

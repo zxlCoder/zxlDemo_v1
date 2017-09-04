@@ -1,9 +1,10 @@
-package com.demo.common;
+package com.demo.config;
 
 import com.demo.blog.BlogController;
 import com.demo.bookstore.BookStoreController;
 import com.demo.common.model._MappingKit;
 import com.demo.index.IndexController;
+import com.demo.springplugin.SpringPlugin;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -23,7 +24,7 @@ import com.jfinal.template.Engine;
  * 
  * API引导式配置
  */
-public class DemoConfig extends JFinalConfig {
+public class MyAppConfig extends JFinalConfig {
 	
 	/**
 	 * 配置常量
@@ -64,6 +65,7 @@ public class DemoConfig extends JFinalConfig {
 		// 所有映射在 MappingKit 中自动化搞定
 		_MappingKit.mapping(arp);
 		me.add(arp);
+	//	me.add(new SpringPlugin("classpath*:*.xml"));
 	}
 	
 	public static DruidPlugin createDruidPlugin() {
