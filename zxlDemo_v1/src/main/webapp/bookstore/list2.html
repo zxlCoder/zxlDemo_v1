@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- <link href="/bookstore/styles/main.css" type="text/css" rel="stylesheet" /> -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<title>图书管理</title>
+<style>
+* {
+	margin:0;
+	padding:0;
+}
+.main{
+	width:1200px;
+	margin:0 auto; 
+}
+</style>
+</head>
+<body>
+    <div class="main">
+        <h2 class="title"><span>图书管理</span></h2> 
+        <form action="/bookstore/delete" method="post">
+        <p>
+            <a href="/bookstore/addUI" class="btn btn-primary btn-sm">添加</a>
+            <input type="submit"  value="删除选择项" class="btn btn-danger btn-sm"/>&nbsp; &nbsp;
+            <input type="text" id="title" value="#(title)"/>
+            <a href="javascript:void(0)" onclick="seach()" class="btn btn-primary btn-sm">搜索</a>
+        </p>
+        <p></p>
+        <div class="row">
+        <div class="col-lg-12 col-sm-12 col-md-12">
+           <table class="table table-hover table-bordered">
+            <thread>
+                <th><input type="checkbox" id="chbAll"></th>
+                <th>编号</th>
+                <th>书名</th>
+                <th>价格</th>
+                <th>出版日期</th>
+                <th>操作</th>
+            </thread>
+            <tbody>
+			#for(book : pageBean.list)
+                <tr>
+                    <th><input type="checkbox" name="id" value="#(book.id)"></th>
+                    <td>#(book.id)</td>
+                    <td>#(book.title)</td>
+                    <td>#(book.price)</td>
+                    <td>#date(book.publishDate, "yyyy年MM月dd日")</td>
+                    <td>
+                    <a href="/bookstore/editUI?id=#(book.id)" class="btn btn-primary btn-sm">编辑</a>
+                    <a href="/bookstore/delete?id=#(book.id)" class="btn btn-danger btn-sm">删除</a>
+                    </td>
+                </tr>
+            #end
+            </tbody>
+        </table>
+        </div>
+        </div>
+        <p style="color: red"><!-- 删除成功 ! --></p>
+        <div class="paging"></div>
+    </form>
+    </div>
+</body>
+<script type="text/javascript" src="/js/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="/js/pageUtil.js"></script>
+<script type="text/javascript">
+	function seach(){
+		var title = document.getElementById('title').value;
+		var url = "/bookstore/list?title="+title+"&pageNum="
+		window.location.href = url;
+	}
+</script>
+<script>
+$(function() { 
+	var title = document.getElementById('title').value;
+	page.showPage(#(pageBean.pageNumber),#(pageBean.totalPage),"/bookstore/list?title="+title+"&pageNum=");
+});
+/* $(function(){
+	page.showPage(${pageBean.currentPage},${pageBean.totalPages},"changePage");
+}); */
+
+/* function changePage(nextPage){
+	window.location.href="/bookstore/list?pageNum="+nextPage;
+} */
+</script>
+</html>

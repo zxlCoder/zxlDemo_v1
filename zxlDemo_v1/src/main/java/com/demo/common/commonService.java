@@ -73,49 +73,41 @@ public class commonService<M extends Model>{
 		return (M) dao.findById(id);
 	}
 	
-	public List<M> findAll() {
-		return dao.find("select * from "+table);
-	}
-	
-	public List<M> findByTitle(String title) {
-		return dao.find("select * from "+table+" where title like ?", title+"%");
-	}
-	
-	public Page<M> paginate(int pageNumber, int pageSize) {
-		return dao.paginate(pageNumber, pageSize, "select *", "from "+table);
-	}
-	
-	public Page<M> paginate(int pageNumber, int pageSize, String title) {
-		return dao.paginate(pageNumber, pageSize, "select *", "from "+table+" where title like ? ", title+"%");
-	}
-	
 	public M findByObject(M entity){
 		List<M> result = search(entity, null, null);
 		return ((result.size() > 0) ? (M) result.get(0) : null);
 	}
 
-	public List<M> queryObjectForList(){
+	public List<M> queryList(){
 		return search(null, null, null);
 	}
 
-	public List<M> queryObjectForList(String orderField){
-		return search(null, orderField, null);
-	}
-
-	public List<M> queryObjectForList(M entity){
+	public List<M> queryList(M entity){
 		return search(entity, null, null);
 	}
-
-	public PageBean<M> queryPageForList(){
-		return seachPage(null, null);
-	}
-
-	public PageBean<M> queryPageForList(String orderField){
-		return seachPage(null, orderField);
+	
+	public List<M> queryList(String sort, String order){
+		return search(null, sort, order);
 	}
 	
-	public PageBean<M> queryPageForList(M entity){
-		return seachPage(entity, null);
+	public List<M> queryList(M entity, String sort, String order){
+		return search(entity, sort, order);
+	}
+	
+	public PageBean<M> queryPage(int pageNum, int pageSize){
+		return seachPage(null, pageNum, pageSize, null, null);
+	}
+	
+	public PageBean<M> queryPage(int pageNum, int pageSize, M entity){
+		return seachPage(entity, pageNum, pageSize, null, null);
+	}
+	
+	public PageBean<M> queryPage(int pageNum, int pageSize, String sort, String order){
+		return seachPage(null, pageNum, pageSize, sort, order);
+	}
+
+	public PageBean<M> queryPage(int pageNum, int pageSize, String sort, String order, M entity){
+		return seachPage(entity, pageNum, pageSize, sort, order);
 	}
 	
 	/**
@@ -145,7 +137,6 @@ public class commonService<M extends Model>{
 	}
 	
 	private PageBean<M> seachPage(M entity, int pageNum, int pageSize, String sort, String order){
-		//order不指定时数据库默认asc
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
 		sb.append("select * from ").append(table).append(" where 1=1 ");
@@ -172,12 +163,12 @@ public class commonService<M extends Model>{
 		sb.append(" limit "+start+","+pageSize);
 		List<M> list = dao.find(sb.toString(), values.toArray());
 		long total = Db.queryLong(sb2.toString(), values.toArray());
-		PageBean pageBean = new PageBean<M>(pageNum+1, pageSize, (int)total,  list);
+		PageBean pageBean = new PageBean<M>(pageNum, pageSize, (int)total,  list);
 		return pageBean;
 	}
 	
 	//抽离的通用方法
-	private PageBean<M> seachPage(M entity, String orderBy){
+/*	private PageBean<M> seachPage(M entity, String orderBy){
 		HttpServletRequest request = CommonUtil.getHttpRequest();
 		Integer pageNum = CommonUtil.valueOf(request.getParameter("pageNum"), 1);
 		Integer pageSize = CommonUtil.valueOf(request.getParameter("pageSize"), 10);
@@ -219,5 +210,5 @@ public class commonService<M extends Model>{
 		long total = Db.queryLong(sb2.toString(), values.toArray());
 		PageBean pageBean = new PageBean<M>(pageNum+1, pageSize, (int)total,  list);
 		return pageBean;
-	}
+	}*/
 }

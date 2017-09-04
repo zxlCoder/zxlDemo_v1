@@ -13,30 +13,26 @@ import com.demo.common.model.Book;
 @Before(BookStoreInterceptor.class)
 public class BookStoreController extends Controller {
 	
-	//static BookStoreService service = new BookStoreService();
 	static commonService<Book> service = new commonService<Book>(Book.class);
 	
 	public void list() {
 		String title = getPara("title");
 		if(StrKit.notBlank(title)){
-			setAttr("pageBean", service.paginate(getParaToInt("pageNum", 1), 10, title));
+			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
 		}else{
-			setAttr("pageBean", service.paginate(getParaToInt("pageNum", 1), 10));
+			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10));
 		}
 		setAttr("title", title);
-	//	render("blog.html");
-		
-	//	List<Book> bookList = service.findAll();
-    //  setAttr("bookList", bookList);
+		render("list2.html");
 	}
 	
-	public void seach() {
+	/*public void seach() {
 		String title = getPara("title");
 		Page<Book> pageBean = service.paginate(getParaToInt("pageNum", 1), 10, title);
 		setAttr("pageBean", pageBean);
 		setAttr("title", title);
 		render("list.html");
-	}
+	}*/
 	
 	public void addUI() {}
 	
