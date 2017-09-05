@@ -11,11 +11,11 @@ import java.util.List;
 public class PageBean<T> {
 
 	// 指定的或是页面参数
-	private int startPage; // 开始页
-	private int size; // 每页显示多少条
+	private int pageNumber; // 开始页
+	private int pageSize; // 每页显示多少条
 
 	// 查询数据库
-	private int total; // 总记录数
+	private int totalRow; // 总记录数
 	private List<T> list; // 本页的数据列表
 
 	// 计算
@@ -35,9 +35,9 @@ public class PageBean<T> {
 	 * @param list 当页内容list
 	 */
 	public PageBean(int startPage, int size, int total, List list) {
-		this.startPage = startPage;
-		this.size = size;
-		this.total = total;
+		this.pageNumber = startPage;
+		this.pageSize = size;
+		this.totalRow = total;
 		this.list = list;
 
 		// 计算总页码
@@ -67,28 +67,28 @@ public class PageBean<T> {
 		}
 	}
 
-	public int getStartPage() {
-		return startPage;
+	public int getPageNumber() {
+		return pageNumber;
 	}
 
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
 	}
 
-	public int getSize() {
-		return size;
+	public int getPageSize() {
+		return pageSize;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 
-	public int getTotal() {
-		return total;
+	public int getTotalRow() {
+		return totalRow;
 	}
 
-	public void setTotal(int total) {
-		this.total = total;
+	public void setTotalRow(int totalRow) {
+		this.totalRow = totalRow;
 	}
 
 	public List<T> getList() {
@@ -123,5 +123,13 @@ public class PageBean<T> {
 		this.endPageIndex = endPageIndex;
 	}
 
+	public String toString() {
+		StringBuilder msg = new StringBuilder();
+		msg.append("pageNumber : ").append(pageNumber);
+		msg.append("\npageSize : ").append(pageSize);
+		msg.append("\ntotalPage : ").append(totalPage);
+		msg.append("\ntotalRow : ").append(totalRow);
+		return msg.toString();
+	}
 }
 
