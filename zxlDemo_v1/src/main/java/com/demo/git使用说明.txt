@@ -25,3 +25,7 @@ pull  把上面两步可以合并成一步(项目右键 -> team -> pull)
 总结: 操作组合 commit -> pull -> push to upstream
 
 精简操作组合  commit -> push to upstream  如果不是最新代码会自动提示 :non-fast-forward,然后再 pull也不迟
+
+git冲突位置: pull后可能发生冲突, synchronize workspace可以提前避免冲突
+
+因为pull 是fetch from upstream 和 merge 的组合,所以pull 是先fetch from upstream ,然后merge 发生了冲突(merge不成功),修改文件后只需 mark as merge 可标记解决冲突
