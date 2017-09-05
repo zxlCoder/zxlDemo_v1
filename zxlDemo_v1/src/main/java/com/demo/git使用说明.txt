@@ -23,3 +23,5 @@ pull  把上面两步可以合并成一步(项目右键 -> team -> pull)
 
 
 总结: 操作组合 commit -> pull -> push to upstream
+
+精简操作组合  commit -> push to upstream  如果不是最新代码会自动提示 :non-fast-forward,然后再 pull也不迟
