@@ -23,6 +23,17 @@ public class BookStoreController extends Controller {
 			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10));
 		}
 		setAttr("title", title);
+		render("list.html");
+	}
+	
+	public void list2() {
+		String title = getPara("title");
+		if(StrKit.notBlank(title)){
+			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
+		}else{
+			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10));
+		}
+		setAttr("title", title);
 		render("list2.html");
 	}
 	
