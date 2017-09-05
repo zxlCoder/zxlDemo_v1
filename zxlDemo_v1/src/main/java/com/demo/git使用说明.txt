@@ -18,3 +18,8 @@ pull  把上面两步可以合并成一步(项目右键 -> team -> pull)
 本地远程分支
 
 
+
+经测试: 项目右键 -> team -> synchronize workspace 时,会自动 fetch from upstream,然后进行同步对比,所以对比的是本地分支(实际是本地工作空间)代码和远程分支代码
+
+
+总结: 操作组合 commit -> pull -> push to upstream
