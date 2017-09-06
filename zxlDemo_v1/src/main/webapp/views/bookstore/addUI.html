@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="/views/bookstore/styles/main.css" type="text/css" rel="stylesheet" />
+<title>新增图书</title>
+</head>
+<body>
+    <div class="main">
+        <h2 class="title"><span>新增图书</span></h2>
+        <form action="/bookstore/add" method="post">
+        <fieldset>
+            <legend>图书</legend>
+            <p>
+                <label for="title">图书名称：</label>
+                <input type="text" id="title" name="book.title"  value="#(book.title??)"/>
+            </p>
+            <p>
+                <label for="title">图书价格：</label>
+                <input type="text" id="price" name="book.price" value="#(book.price??)"/>
+            </p>
+            <p>
+                <label for="title">出版日期：</label>
+                <input type="text" id="publishDate" name="book.publishDate"  value="#(book.publishDate??)"/>
+            </p>
+            <p>
+              <input type="submit" value="保存" class="btn">
+            </p>
+        </fieldset>
+        </form>
+        <!-- <p style="color: red">${message}</p> -->
+        <!-- <p style="color: red">添加成功 !</p> -->
+        <p style="color: red">#(msg)</p> 
+        
+        <p>
+            <a href="/bookstore/list" class="abtn">返回列表</a>
+        </p>
+    </div>
+</body>
+</html>
