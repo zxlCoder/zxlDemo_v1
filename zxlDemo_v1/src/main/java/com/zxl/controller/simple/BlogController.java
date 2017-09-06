@@ -19,6 +19,11 @@ public class BlogController extends Controller {
 	
 	static BlogService service = new BlogService();
 	
+	public void home() {
+		setAttr("blogPage", service.paginate(getParaToInt(0, 1), 10));
+		render("index.html");
+	}
+	
 	public void index() {
 		setAttr("blogPage", service.paginate(getParaToInt(0, 1), 10));
 		render("blog.html");

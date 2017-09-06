@@ -40,8 +40,8 @@ public class MyAppConfig extends JFinalConfig {
 	}
 	
 	public void configEngine(Engine me) {
-		me.addSharedFunction("/views/common/_layout.html");
-		me.addSharedFunction("/views/common/_paginate.html");
+		me.addSharedFunction("/views/blog/common/_layout.html");
+		me.addSharedFunction("/views/blog/common/_paginate.html");
 	}
 	
 	/**
