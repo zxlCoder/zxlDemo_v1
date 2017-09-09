@@ -27,13 +27,13 @@ import java.util.Map.Entry;
 @SuppressWarnings({"rawtypes", "unchecked","unused"})
 public class commonService<M extends Model>{
 	
-	private Model dao;
-	private String table;
+	protected M dao;
+	protected String table;
 	
 	public commonService(Class<M> clazz){
 		try {
 			M temp = clazz.newInstance();
-			this.dao = temp.dao();
+			this.dao = (M) temp.dao();
 			this.table = TableMapping.me().getTable(temp.getClass()).getName();
 		} catch (Exception e) {
 			e.printStackTrace();

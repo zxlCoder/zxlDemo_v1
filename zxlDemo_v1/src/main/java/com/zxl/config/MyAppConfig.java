@@ -12,7 +12,8 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
-import com.zxl.config.route.CommonRoute;
+import com.zxl.config.route.SimpleRoute;
+import com.zxl.config.route.SyproRoute;
 import com.zxl.model._MappingKit;
 
 /**
@@ -36,12 +37,13 @@ public class MyAppConfig extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
-		me.add(new CommonRoute());
+		me.add(new SimpleRoute());
+		me.add(new SyproRoute());
 	}
 	
 	public void configEngine(Engine me) {
-		me.addSharedFunction("/views/blog/common/_layout.html");
-		me.addSharedFunction("/views/blog/common/_paginate.html");
+		me.addSharedFunction("/views/simple/blog/common/_layout.html");
+		me.addSharedFunction("/views/simple/blog/common/_paginate.html");
 	}
 	
 	/**

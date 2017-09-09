@@ -18,6 +18,13 @@ public class _MappingKit {
 	public static void mapping(ActiveRecordPlugin arp) {
 		arp.addMapping("blog", "id", Blog.class);
 		arp.addMapping("book", "id", Book.class);
+		arp.addMapping("sy_menu", "id", SyMenu.class);
+		arp.addMapping("sy_portal", "id", SyPortal.class);
+		arp.addMapping("sy_resource", "id", SyResource.class);
+		arp.addMapping("sy_role", "id", SyRole.class);
+		arp.addMapping("sy_role_menu", "id", SyRoleMenu.class);
+		arp.addMapping("sy_user", "id", SyUser.class);
+		arp.addMapping("sy_user_role", "id", SyUserRole.class);
 	}
 }
 

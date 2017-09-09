@@ -11,7 +11,7 @@ import com.zxl.validator.BookStoreValidator;
 @Before(BookStoreInterceptor.class)
 public class BookStoreController extends Controller {
 	
-	static commonService<Book> service = new commonService<Book>(Book.class);
+	private commonService<Book> service = new commonService<Book>(Book.class);
 	
 	public void list() {
 		String title = getPara("title");
