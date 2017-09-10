@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.jfinal.plugin.activerecord.Db;
 import com.zxl.model.SyMenu;
+import com.zxl.model.SyRole;
 import com.zxl.service.common.commonService;
 import com.zxl.vo.EasyuiTreeNode;
 import com.zxl.vo.Menu;
@@ -79,5 +82,37 @@ public class MenuService extends commonService<SyMenu>{
 			treegrid.add(m);
 		}
 		return treegrid;
+	}
+
+	public SyMenu add(Menu menu) {
+		SyMenu syMenu = new SyMenu();
+		syMenu.setIcon(menu.getIconCls());
+		syMenu.setPid(menu.getParentId());
+		syMenu.setSeq(menu.getSeq());
+		syMenu.setSrc(menu.getSrc());
+		syMenu.setText(menu.getText());
+		syMenu.save();
+		return syMenu;
+	}
+
+	public void edit(Menu menu) {
+		SyMenu syMenu = new SyMenu();
+		syMenu.setIcon(menu.getIconCls());
+		syMenu.setId(menu.getId());
+		syMenu.setPid(menu.getParentId());
+		syMenu.setSeq(menu.getSeq());
+		syMenu.setSrc(menu.getSrc());
+		syMenu.setText(menu.getText());
+		syMenu.update();
+	}
+
+	public void del(Integer id) {
+		List<SyMenu> symenus = dao.find("select * from "+table+" t where t.pid = ? ", id);
+		if(symenus != null && symenus.size() > 0){
+			for (SyMenu syMenu : symenus) {
+				del(syMenu.getId());
+			}
+		}
+		dao.deleteById(id);		
 	}
 }

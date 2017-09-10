@@ -109,6 +109,10 @@ public class commonService<M extends Model>{
 		return seachPage(entity, pageNum, pageSize, sort, order);
 	}
 	
+	public PageBean<M> queryPage(String sql, int pageNum, int pageSize, List<Object> values){
+		return seachPage(sql, pageNum, pageSize, values);
+	}
+	
 	/**
 	 * 核心方法,私有化,只供本类调用
 	 */
@@ -136,10 +140,10 @@ public class commonService<M extends Model>{
 	}
 	
 	private PageBean<M> seachPage(M entity, int pageNum, int pageSize, String sort, String order){
-		StringBuilder sb = new StringBuilder();
-		StringBuilder sb2 = new StringBuilder();
-		sb.append("select * from ").append(table).append(" where 1=1 ");
-		sb2.append("select count(*) from ").append(table).append(" where 1=1 ");
+		StringBuilder sb = new StringBuilder("from "+table+" where 1=1 ");
+	//	StringBuilder sb2 = new StringBuilder();
+	//	sb.append("select * from ").append(table).append(" where 1=1 ");
+	//	sb2.append("select count(*) from ").append(table).append(" where 1=1 ");
 		List<Object> values = new ArrayList<Object>();
 		if(entity!=null){
 			Model maps2 = ((Model)entity);
@@ -147,7 +151,7 @@ public class commonService<M extends Model>{
 			for(Entry<String, Object> entry:set){
 				if(entry.getValue() != null){
 					sb.append(" and ").append(entry.getKey()).append("=?");
-					sb2.append(" and ").append(entry.getKey()).append("=?");
+	//				sb2.append(" and ").append(entry.getKey()).append("=?");
 					values.add(entry.getValue());
 				}
 			}
@@ -160,8 +164,17 @@ public class commonService<M extends Model>{
 		}
 		int start = (pageNum-1) * pageSize;
 		sb.append(" limit "+start+","+pageSize);
-		List<M> list = dao.find(sb.toString(), values.toArray());
-		long total = Db.queryLong(sb2.toString(), values.toArray());
+		List<M> list = dao.find("select * "+sb.toString(), values.toArray());
+		long total = Db.queryLong("select count(*) "+sb.toString(), values.toArray());
+		PageBean pageBean = new PageBean<M>(pageNum, pageSize, (int)total,  list);
+		return pageBean;
+	}
+	
+	private PageBean<M> seachPage(String sql, int pageNum, int pageSize, List<Object> values){
+		int start = (pageNum-1) * pageSize;
+		String sb=" limit "+start+","+pageSize;
+		List<M> list = dao.find("select * "+sql+" "+sb, values.toArray());
+		long total = Db.queryLong("select count(*) "+sql+" ", values.toArray());
 		PageBean pageBean = new PageBean<M>(pageNum, pageSize, (int)total,  list);
 		return pageBean;
 	}

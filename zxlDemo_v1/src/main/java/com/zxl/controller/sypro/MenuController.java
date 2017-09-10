@@ -6,13 +6,6 @@ import com.zxl.service.sypro.MenuService;
 import com.zxl.vo.Json;
 import com.zxl.vo.Menu;
 
-
-/**
- * 菜单控制器
- * 
- * @author 孙宇
- * 
- */
 public class MenuController extends Controller {
 
 	private MenuService  menuService = new MenuService();
@@ -34,23 +27,16 @@ public class MenuController extends Controller {
 	public void add() {
 		Menu menu = getBean(Menu.class, "");
 		Json json = new Json();
-		SyMenu syMenu = new SyMenu();
-		syMenu.setIcon(menu.getIconCls());
-		syMenu.setPid(menu.getParentId());
-		syMenu.setSeq(menu.getSeq());
-		syMenu.setSrc(menu.getSrc());
-		syMenu.setText(menu.getText());
-		menuService.save(syMenu);
+		json.setObj(menuService.add(menu));
 		json.setSuccess(true);
 		json.setMsg("添加成功!");
-		json.setObj(syMenu);
 		renderJson(json);	
 	}
 
 	public void del() {
 		Menu menu = getBean(Menu.class, "");
 		Json json = new Json();
-		menuService.deleteById(menu.getId());
+		menuService.del(menu.getId());
 		json.setSuccess(true);
 		json.setMsg("删除成功!");
 		renderJson(json);	
@@ -59,14 +45,7 @@ public class MenuController extends Controller {
 	public void edit() {
 		Menu menu = getBean(Menu.class, "");
 		Json json = new Json();
-		SyMenu syMenu = new SyMenu();
-		syMenu.setIcon(menu.getIconCls());
-		syMenu.setId(menu.getId());
-		syMenu.setPid(menu.getParentId());
-		syMenu.setSeq(menu.getSeq());
-		syMenu.setSrc(menu.getSrc());
-		syMenu.setText(menu.getText());
-		menuService.update(syMenu);
+		menuService.edit(menu);
 		json.setSuccess(true);
 		json.setMsg("编辑成功!");
 		renderJson(json);	
