@@ -1,16 +1,9 @@
 package com.zxl.controller.sypro;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.jfinal.core.Controller;
-import com.zxl.model.SyMenu;
-import com.zxl.service.sypro.MenuService;
 import com.zxl.service.sypro.UserService;
 import com.zxl.vo.EasyuiDataGrid;
-import com.zxl.vo.EasyuiDataGridJson;
 import com.zxl.vo.Json;
-import com.zxl.vo.Menu;
 import com.zxl.vo.User;
 
 
@@ -40,6 +33,11 @@ public class UserController extends Controller {
 		User user = getBean(User.class, "");
 		renderJson(userService.add(user));
 	}
+	
+	public void edit() {
+		User user = getBean(User.class, "");
+		renderJson(userService.edit(user));
+	}
 
 	/*	public User edit(User user) {
 		return userService.edit(user);
@@ -51,14 +49,15 @@ public class UserController extends Controller {
 		userService.editUsersRole(userIds, roleId);
 		j.setSuccess(true);
 		return j;
-	}
+	}*/
 
 
-	public Json del(String ids) {
+	public void del() {
+		String ids = getPara("ids");
 		Json j = new Json();
 		userService.del(ids);
 		j.setSuccess(true);
-		return j;
-	}*/
+		renderJson(j);
+	}
 
 }

@@ -3,6 +3,7 @@ package com.zxl.service.sypro;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -34,22 +35,22 @@ public class UserService extends commonService<SyUser>{
 		List<Object> values = new ArrayList<Object>();
 		if (user != null) {// 添加查询条件
 			if (StrKit.notBlank(user.getName())) {
-				sql += " and t.name like %" + user.getName().trim() + "% ";
+				sql += " and t.name like '%" + user.getName().trim() + "%' ";
 			}
 			if (user.getCreatedatetimeStart() != null) {
-				sql += " and t.createdatetime>=? ";
+				sql += " and t.createtime>=? ";
 				values.add(user.getCreatedatetimeStart());
 			}
 			if (user.getCreatedatetimeEnd() != null) {
-				sql += " and t.createdatetime<=? ";
+				sql += " and t.createtime<=? ";
 				values.add(user.getCreatedatetimeEnd());
 			}
 			if (user.getModifydatetimeStart() != null) {
-				sql += " and t.modifydatetime>=? ";
+				sql += " and t.modifytime>=? ";
 				values.add(user.getModifydatetimeStart());
 			}
 			if (user.getModifydatetimeEnd() != null) {
-				sql += " and t.modifydatetime<=? ";
+				sql += " and t.modifytime<=? ";
 				values.add(user.getModifydatetimeEnd());
 			}
 		}
@@ -117,5 +118,47 @@ public class UserService extends commonService<SyUser>{
 			Db.batchSave(syUserRoles, syUserRoles.size());
 		}		
 		return user;
+	}
+
+	public User edit(User user) {
+		SyUser syuser = new SyUser();
+		if(StrKit.notBlank(user.getPassword())){
+			user.setPassword(Encrypt.e(user.getPassword()));
+			syuser.setPassword(user.getPassword());
+		}
+		if (user.getCreatedatetime() == null) {
+			user.setCreatedatetime(new Date());
+		}
+		if (user.getModifydatetime() == null) {
+			user.setModifydatetime(new Date());
+		}
+		syuser.setId(user.getId());
+		syuser.setName(user.getName());
+		syuser.setCreatetime(user.getCreatedatetime());
+		syuser.setModifytime(user.getModifydatetime());
+		syuser.update();
+		Db.update("delete from "+sy_user_role+" where userId = ?", syuser.getId());
+		if (StrKit.notBlank(user.getRoleId())) {// 保存角色和资源的关系
+			String[] roleIds = user.getRoleId().split(",");
+			List<SyUserRole> syUserRoles = new ArrayList<SyUserRole>();
+			for (String roleId : roleIds) {
+				SyUserRole syUserRole = new SyUserRole();// 关系
+				syUserRole.setUserId(syuser.getId());
+				syUserRole.setRoleId(Integer.parseInt(roleId));
+				syUserRoles.add(syUserRole);
+			}
+			Db.batchSave(syUserRoles, syUserRoles.size());
+		}		
+		return user;
+	}
+
+	public void del(String ids) {
+		for (String id : ids.split(",")) {
+			SyUser syuser = dao.findById(id);
+			if (syuser != null) {
+				Db.update("delete from "+sy_user_role+" where userId = ?", syuser.getId());
+				dao.deleteById(syuser.getId());
+			}
+		}
 	}
 }

@@ -75,7 +75,7 @@
 				handler : function() {
 					if (userForm.find('[name=id]').val() != '') {
 						userForm.form('submit', {
-							url : 'userController.do?edit',
+							url : '/sypro/user/edit',
 							success : function(data) {
 								userDialog.dialog('close');
 								$.messager.show({
@@ -87,7 +87,7 @@
 						});
 					} else {
 						userForm.form('submit', {
-							url : 'userController.do?add',
+							url : '/sypro/user/add',
 							success : function(data) {
 								try {
 									var d = $.parseJSON(data);
@@ -239,7 +239,7 @@
 						ids.push(rows[i].id);
 					}
 					$.ajax({
-						url : 'userController.do?del',
+						url : '/sypro/user/del',
 						data : {
 							ids : ids.join(',')
 						},
