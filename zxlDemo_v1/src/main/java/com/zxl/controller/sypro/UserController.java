@@ -28,7 +28,6 @@ public class UserController extends Controller {
 		renderJson(userService.datagrid(dg, user));
 	}
 
-
 	public void add() {
 		User user = getBean(User.class, "");
 		renderJson(userService.add(user));
@@ -39,18 +38,12 @@ public class UserController extends Controller {
 		renderJson(userService.edit(user));
 	}
 
-	/*	public User edit(User user) {
-		return userService.edit(user);
-	}
-
-
 	public Json editUsersRole(String userIds, String roleId) {
 		Json j = new Json();
 		userService.editUsersRole(userIds, roleId);
 		j.setSuccess(true);
 		return j;
-	}*/
-
+	}
 
 	public void del() {
 		String ids = getPara("ids");

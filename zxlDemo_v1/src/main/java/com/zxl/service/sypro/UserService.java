@@ -3,8 +3,6 @@ package com.zxl.service.sypro;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.TableMapping;
@@ -158,6 +156,20 @@ public class UserService extends commonService<SyUser>{
 			if (syuser != null) {
 				Db.update("delete from "+sy_user_role+" where userId = ?", syuser.getId());
 				dao.deleteById(syuser.getId());
+			}
+		}
+	}
+
+	public void editUsersRole(String userIds, String roleId) {
+		for (String userId : userIds.split(",")) {
+			Db.update("delete from "+sy_user_role+" where userId = ?", userId);
+			if (StrKit.notBlank(roleId)) {
+				for (String id : roleId.split(",")) {
+					SyUserRole syUserRole = new SyUserRole();// 关系
+					syUserRole.setUserId(Integer.parseInt(userId));
+					syUserRole.setRoleId(Integer.parseInt(id));
+					syUserRole.save();
+				}
 			}
 		}
 	}
