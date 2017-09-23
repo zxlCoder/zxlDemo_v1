@@ -1,5 +1,6 @@
 package com.zxl.service.sypro;
 
+import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,5 +115,17 @@ public class MenuService extends commonService<SyMenu>{
 			}
 		}
 		dao.deleteById(id);		
+	}
+
+	public Boolean pidInChild(Integer id, Integer pid, Map<String, Boolean> map){
+		List<SyMenu> symenus = dao.find("select id from "+table+" t where t.pid = ?", id);
+		for (SyMenu syMenu : symenus) {
+			if(syMenu.getId().intValue() == pid){ //上级菜单不能为自己的子菜单
+				map.put("flag", true);
+				return true;
+			}  
+			pidInChild(syMenu.getId(), pid, map);
+		}
+		return map.get("flag");
 	}
 }

@@ -142,4 +142,16 @@ public class RoleService extends commonService<SyRole>{
 		Db.update("delete from "+sy_role_menu+" where roleId = ?", id);
 		dao.deleteById(id);
 	}
+	
+	public Boolean pidInChild(Integer id, Integer pid, Map<String, Boolean> map){
+		List<SyRole> syRoles = dao.find("select id from "+table+" t where t.pid = ?", id);
+		for (SyRole syRole : syRoles) {
+			if(syRole.getId().intValue() == pid){ //上级菜单不能为自己的子菜单
+				map.put("flag", true);
+				return true;
+			}  
+			pidInChild(syRole.getId(), pid, map);
+		}
+		return map.get("flag");
+	}
 }

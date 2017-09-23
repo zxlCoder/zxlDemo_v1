@@ -1,5 +1,8 @@
 package com.zxl.controller.sypro;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.jfinal.core.Controller;
 import com.zxl.service.sypro.RoleService;
 import com.zxl.vo.Json;
@@ -42,9 +45,17 @@ public class RoleController extends Controller {
 	public void edit() {
 		Role role = getBean(Role.class, "");
 		Json json = new Json();
-		roleService.edit(role);
-		json.setSuccess(true);
-		json.setMsg("编辑成功!");
+		Map<String, Boolean> map = new HashMap<String, Boolean>();
+		map.put("flag", false);
+		Boolean pidInChild = roleService.pidInChild(role.getId(), role.getParentId(), map);
+		if(pidInChild){
+			json.setSuccess(false);
+			json.setMsg("上级角色不可以是自己的子角色!");
+		}else{
+			roleService.edit(role);
+			json.setSuccess(true);
+			json.setMsg("编辑成功!");
+		}
 		renderJson(json);	
 	}
 

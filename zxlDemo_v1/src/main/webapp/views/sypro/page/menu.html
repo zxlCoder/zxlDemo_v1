@@ -261,9 +261,10 @@
 								editRow = undefined;
 							} else {
 								$.messager.show({
-									msg : '保存菜单失败!',
+									msg : r.msg,
 									title : '提示'
 								});
+								editRow = undefined;
 							}
 						}
 					});

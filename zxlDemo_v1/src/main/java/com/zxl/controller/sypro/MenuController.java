@@ -1,5 +1,8 @@
 package com.zxl.controller.sypro;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.jfinal.core.Controller;
 import com.zxl.model.SyMenu;
 import com.zxl.service.sypro.MenuService;
@@ -45,9 +48,17 @@ public class MenuController extends Controller {
 	public void edit() {
 		Menu menu = getBean(Menu.class, "");
 		Json json = new Json();
-		menuService.edit(menu);
-		json.setSuccess(true);
-		json.setMsg("编辑成功!");
+		Map<String, Boolean> map = new HashMap<String, Boolean>();
+		map.put("flag", false);
+		Boolean pidInChild = menuService.pidInChild(menu.getId(), menu.getParentId(), map);
+		if(pidInChild){
+			json.setSuccess(false);
+			json.setMsg("上级菜单不可以是自己的子菜单!");
+		}else{
+			menuService.edit(menu);
+			json.setSuccess(true);
+			json.setMsg("编辑成功!");
+		}
 		renderJson(json);	
 	}
 
