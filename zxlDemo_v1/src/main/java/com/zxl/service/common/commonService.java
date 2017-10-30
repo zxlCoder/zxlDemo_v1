@@ -40,7 +40,7 @@ public class commonService<M extends Model>{
 		}
 	}
 	
-	public M save(M model) {
+	public M add(M model) {
 		model.save();
 		return model;
 	}
@@ -68,48 +68,48 @@ public class commonService<M extends Model>{
 		return model;
 	}
 	
-	public M findById(int id) {
+	public M get(int id) {
 		return (M) dao.findById(id);
 	}
 	
-	public M findByObject(M entity){
+	public M getByObject(M entity){
 		List<M> result = search(entity, null, null);
 		return ((result.size() > 0) ? (M) result.get(0) : null);
 	}
 
-	public List<M> queryList(){
+	public List<M> getList(){
 		return search(null, null, null);
 	}
 
-	public List<M> queryList(M entity){
+	public List<M> getList(M entity){
 		return search(entity, null, null);
 	}
 	
-	public List<M> queryList(String sort, String order){
+	public List<M> getList(String sort, String order){
 		return search(null, sort, order);
 	}
 	
-	public List<M> queryList(M entity, String sort, String order){
+	public List<M> getList(M entity, String sort, String order){
 		return search(entity, sort, order);
 	}
 	
-	public PageBean<M> queryPage(int pageNum, int pageSize){
+	public PageBean<M> getPage(int pageNum, int pageSize){
 		return seachPage(null, pageNum, pageSize, null, null);
 	}
 	
-	public PageBean<M> queryPage(int pageNum, int pageSize, M entity){
+	public PageBean<M> getPage(int pageNum, int pageSize, M entity){
 		return seachPage(entity, pageNum, pageSize, null, null);
 	}
 	
-	public PageBean<M> queryPage(int pageNum, int pageSize, String sort, String order){
+	public PageBean<M> getPage(int pageNum, int pageSize, String sort, String order){
 		return seachPage(null, pageNum, pageSize, sort, order);
 	}
 
-	public PageBean<M> queryPage(int pageNum, int pageSize, String sort, String order, M entity){
+	public PageBean<M> getPage(int pageNum, int pageSize, String sort, String order, M entity){
 		return seachPage(entity, pageNum, pageSize, sort, order);
 	}
 	
-	public PageBean<M> queryPage(String sql, int pageNum, int pageSize, List<Object> values){
+	public PageBean<M> getPage(String sql, int pageNum, int pageSize, List<Object> values){
 		return seachPage(sql, pageNum, pageSize, values);
 	}
 	

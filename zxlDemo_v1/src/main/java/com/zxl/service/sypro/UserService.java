@@ -58,7 +58,7 @@ public class UserService extends commonService<SyUser>{
 		if (dg.getSort() != null) {// 设置排序
 			sql += " order by " + dg.getSort() + " " + dg.getOrder();
 		}
-		PageBean<SyUser> pageBean = queryPage(sql, dg.getPage(), dg.getRows(), values);
+		PageBean<SyUser> pageBean = getPage(sql, dg.getPage(), dg.getRows(), values);
 		j.setTotal(pageBean.getTotalRow());
 
 	//	List<Syuser> syusers = userDao.find2(hql, dg.getPage(), dg.getRows(), values);// 查询分页

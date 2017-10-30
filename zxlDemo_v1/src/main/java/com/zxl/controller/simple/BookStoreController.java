@@ -16,9 +16,9 @@ public class BookStoreController extends Controller {
 	public void list() {
 		String title = getPara("title");
 		if(StrKit.notBlank(title)){
-			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
+			setAttr("pageBean", service.getPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
 		}else{
-			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10));
+			setAttr("pageBean", service.getPage(getParaToInt("pageNum", 1), 10));
 		}
 		setAttr("title", title);
 		render("list.html");
@@ -27,9 +27,9 @@ public class BookStoreController extends Controller {
 	public void list2() {
 		String title = getPara("title");
 		if(StrKit.notBlank(title)){
-			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
+			setAttr("pageBean", service.getPage(getParaToInt("pageNum", 1), 10, new Book().setTitle(title)));
 		}else{
-			setAttr("pageBean", service.queryPage(getParaToInt("pageNum", 1), 10));
+			setAttr("pageBean", service.getPage(getParaToInt("pageNum", 1), 10));
 		}
 		setAttr("title", title);
 		render("list2.html");
@@ -47,13 +47,13 @@ public class BookStoreController extends Controller {
 	
 	@Before(BookStoreValidator.class)
 	public void add() {
-		service.save(getModel(Book.class));
+		service.add(getModel(Book.class));
 	//	getModel(Book.class).save();
 		redirect("/bookstore/list");
 	}
 	
 	public void editUI() {
-		setAttr("book", service.findById(getParaToInt("id")));
+		setAttr("book", service.get(getParaToInt("id")));
 	}
 	
 	@Before(BookStoreValidator.class)
