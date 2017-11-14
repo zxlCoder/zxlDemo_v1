@@ -156,6 +156,7 @@ public class commonService<M extends Model>{
 				}
 			}
 		}
+		long total = Db.queryLong("select count(*) "+sb.toString(), values.toArray());
 		if (StrKit.notBlank(sort)){
 			sb.append(" order by "+sort);
 			if (StrKit.notBlank(order)){
@@ -165,7 +166,6 @@ public class commonService<M extends Model>{
 		int start = (pageNum-1) * pageSize;
 		sb.append(" limit "+start+","+pageSize);
 		List<M> list = dao.find("select * "+sb.toString(), values.toArray());
-		long total = Db.queryLong("select count(*) "+sb.toString(), values.toArray());
 		PageBean pageBean = new PageBean<M>(pageNum, pageSize, (int)total,  list);
 		return pageBean;
 	}
