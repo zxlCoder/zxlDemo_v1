@@ -1,9 +1,13 @@
 package com.zxl.controller.sypro;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.zxl.model.SyMenu;
 import com.zxl.service.sypro.RoleService;
 import com.zxl.vo.Json;
 import com.zxl.vo.Role;
@@ -56,6 +60,16 @@ public class RoleController extends Controller {
 			json.setSuccess(true);
 			json.setMsg("编辑成功!");
 		}
+		renderJson(json);	
+	}
+	
+	public void getRoleMenu(){
+		int roleId = getParaToInt("roleId");
+		List<Record> menus = Db.find("select menuId from sy_role_menu  where roleId = ?", roleId);
+		Json json = new Json();
+		json.setSuccess(true);
+		json.setMsg("操作成功!");
+		json.setObj(menus);
 		renderJson(json);	
 	}
 

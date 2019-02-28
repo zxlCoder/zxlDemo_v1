@@ -179,6 +179,7 @@
 						animate : false,
 						lines : !sy.isLessThanIe8(),
 						onLoadSuccess : function(node, data) {
+							debugger;
 							var t = $(this);
 							if (data) {
 								$(data).each(function(index, d) {
@@ -187,6 +188,21 @@
 									}
 								});
 							}
+							
+							var roleId = editRow.id;
+					       	$.ajax({
+								url : '/sypro/role/getRoleMenu',
+								data : {roleId:roleId},
+								cache : false,
+								dataType : "json",
+								success : function(res) {
+									for(var i=0;i<res.obj.length;i++){
+					   					var node = t.tree('find', res.obj[i].menuId);
+					   					t.tree('check', node.target);
+					   				}
+								}
+							});
+					       	
 						}
 					}
 				}

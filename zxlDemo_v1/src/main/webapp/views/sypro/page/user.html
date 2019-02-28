@@ -53,7 +53,7 @@
 		}).dialog('close');
 
 		userRoleForm = $('#userRoleForm').form({
-			url : 'userController.do?editUsersRole',
+			url : '/sypro/user/editUsersRole',
 			success : function(data) {
 				var d = $.parseJSON(data);
 				if (d) {

@@ -38,11 +38,13 @@ public class UserController extends Controller {
 		renderJson(userService.edit(user));
 	}
 
-	public Json editUsersRole(String userIds, String roleId) {
+	public void editUsersRole() {
+		String userIds = getPara("userIds");
+		String roleId = getPara("roleId");
 		Json j = new Json();
 		userService.editUsersRole(userIds, roleId);
 		j.setSuccess(true);
-		return j;
+		renderJson(j);
 	}
 
 	public void del() {
